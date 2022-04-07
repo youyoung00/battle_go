@@ -268,7 +268,7 @@
             <input type="hidden" name='position_x'>
             <input type="hidden" name='position_y'>
             <input type="hidden" name='board_id'> -->
-            <canvas id='canvas'></canvas>
+            <canvas id='canvas' style="cursor:pointer;"></canvas>
             <!-- </form> -->
 
             <div>
@@ -389,15 +389,18 @@
     </script>
 
     <script>
+            // let stone_list = "";
+            // let winner_id = "";
+            // let guest_id = "";
+            // let host_id = "";
+            // let order = "";
+            // let hose_color = "";
+            // let guest_color = "";
         window.onload = function () {
 
             // 2초 간격으로 메시지를 보여줌
             let comment_timerId = setInterval(() => getList(), 500);
-             let timerId = setInterval(() => set_board(), 500);
-
-
-
-
+            let timerId = setInterval(() => set_board(), 500);
 
             canvas = document.getElementById('canvas');
             ctx = canvas.getContext('2d');
@@ -492,15 +495,28 @@ function set_board()
             
             const obj = JSON.parse(data);
             let stone_list = obj['stone_list'];
-            let winner_info = obj['board_data']['winner_id'];
+            let winner_id = obj['board_data']['winner_id'];
+            let guest_id = obj['board_data']['guest_id'];
+            let host_id = obj['board_data']['host_id'];
+            let order = obj['order'];
+            let hose_color = obj['board_data']['host_color'];
+            let guest_color = obj['board_data']['guest_color'];
+            
 
-            if(winner_info){
+            if(winner_id){
+
+                // location.href="result?board_id='<?php echo $board_data->_id?>'"; 
+                 
+                
+
+
+                
                 // alert('승부결정남');
                 // console.log('승부결정남');
-
             }
     
             for (let index = 0; index < stone_list.length; index++) { 
+                console.log(order);
                 console.log(obj);
             let stonex = stone_list[index]['positionx'];
             let stoney = stone_list[index]['positiony'];
@@ -583,11 +599,19 @@ function set_stone(color,x,y)
     // });
     // 마우스 클릭한 위치를 정확한 눈금 위치로 보정
             document.addEventListener('mouseup', (e) => {
+
+                
+
                 if (e.target.id == 'canvas') {
                     let x = Math.round(Math.abs(e.offsetX - margin) / rowSize);
                     let y = Math.round(Math.abs(e.offsetY - margin) / rowSize);
             
                     console.log(x, y);
+
+                    if(x == 19 || y == 19){
+                        // alert('착수 할 수 없는 곳입니다. 다시 두어주세요');
+                        return;
+                    }   
                     
                     $.ajax({
                         cache : false,

@@ -42,7 +42,19 @@
     </head>
     <body>
     <form method="post" action="">
-        <div id="waitpage">왜 그랬어요..</div><br /><br /> 
+        <div id="waitpage">왜 그랬어요.. 
+            <?php 
+                
+                if($win_color == 0){
+                    echo " (흑)".$nick_name."님의 패배! ";
+                    
+                } else{
+                    echo " (백)".$nick_name."님의 패배! ";
+                    
+                }
+                
+            ?>
+        </div><br /><br /> 
         <div class="row col-15 mb-3 mt-3">
             <input type="submit" value="대기실로 이동" class="btn btn-primary active">
         </div>

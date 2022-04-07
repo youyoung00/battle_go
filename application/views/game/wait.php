@@ -30,5 +30,37 @@
             <input type="submit" value="게임화면 이동하기" class="btn btn-warning active">
         </div>
     </form>
+
     </body>
+
+    <script>
+        let timerId = setInterval(() => set_wait(), 500);
+
+        function set_wait(){
+            var formData = $("#chat-form").serialize();
+
+        $.ajax({
+            cache : false,
+            url : "/index.php/game/wait_check?board_id=1", // 요기에
+            type : 'POST', 
+            data : formData, 
+            // settimeout : 500,
+            success : function(data) {
+                // console.log(data);
+                
+                const obj = JSON.parse(data);
+
+                let status = obj["board_data"]["status"];
+        
+
+                
+            }, // success 
+    
+            error : function(xhr, status) {
+                console.log(xhr + " : " + status);
+            }
+        }); 
+        }
+
+    </script>
 </html>
