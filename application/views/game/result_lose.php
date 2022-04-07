@@ -38,6 +38,59 @@
             width: 200px;
             height: 50px;
         }
+        .w-btn-outline:active {
+            transform: scale(1.5);
+        }
+        .w-btn:hover {
+            letter-spacing: 2px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .w-btn-outline:hover {
+            letter-spacing: 2px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .w-btn:active {
+            transform: scale(1.5);
+        }
+        .w-btn-red-outline:hover {
+            background-color: #ff5f2e;
+            color: #e1eef6;
+        }
+        .w-btn-red-outline {
+            border: 3px solid #ff5f2e;
+            color: #6e6e6e;
+        }
+        .w-btn-red {
+            background-color: #ff5f2e;
+            color: #e1eef6;
+        }
+        .w-btn {
+            position: relative;
+            border: none;
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-family: "paybooc-Light", sans-serif;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.25s;
+        }
+
+        .w-btn-outline {
+            position: relative;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-family: "paybooc-Light", sans-serif;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.25s;
+        }
         </style>
     </head>
     <body>
@@ -56,7 +109,7 @@
             ?>
         </div><br /><br /> 
         <div class="row col-15 mb-3 mt-3">
-            <input type="submit" value="대기실로 이동" class="btn btn-primary active">
+            <input type="submit" value="대기실로 이동" class="w-btn-outline w-btn-red-outline">
         </div>
     </form>
     </body>

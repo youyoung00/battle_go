@@ -5,7 +5,7 @@ class Game_model extends CI_Model {
     {
         $this->load->database();
         // $this->db 사용 가능
-        // @_@123
+        // test_@_@123
     }
 
 
@@ -27,7 +27,7 @@ class Game_model extends CI_Model {
 
 
      //게임종료 판단을 위한 착수멤버의 스톤 리스트전달
-     public function select_member_stonelist($board_id,$member_id) {
+    public function select_member_stonelist($board_id,$member_id) {
         //TODO : 돌리스트를 가져오는 쿼리
         //리턴 값 : 돌리스트
         $data = $this->db->query("
@@ -45,35 +45,52 @@ class Game_model extends CI_Model {
 
 
     //바둑알 착수 순서
-    public function select_stone_domino($member_id, $board_id) {
+    public function select_stone_domino($board_id) {
         $data = $this->db->query("
         select 
-            MAX(domino)
+            MAX(domino) as domino
         from 
             GAME
         where
-            member_id = '".$member_id."'
-            AND
             waitboard_id = '".$board_id."'
         ");
-        return $data->result_array();
+        return $data->row();
 
     }
 
 
     //돌 좌표값 입력 메서드
-    public function insert_game($x,$y,$order,$color, $member_id, $board_id) {
+    public function insert_game($x,$y,$domino,$color, $member_id, $board_id) {
         //TODO : 돌 좌표값을 입력하는 쿼리
         //리턴 값 : x
 
         $this->db->query("
         INSERT INTO 
-            GAME(positionx, positiony, order, color, member_id, board_id)
+            GAME(positionx, positiony, domino, color, member_id, waitboard_id)
         values 
-            ('".$x."', '".$y."', '".$order."', '".$color."','".$member_id."','".$board_id."');
+            ('".$x."', '".$y."', '".$domino."', '".$color."', '".$member_id."', '".$board_id."');
         ");
 
     }
+
+
+    public function record_game_result($member_id, $result) {
+        // 게임 결과 저장
+        // win : 1, lose : 0, total : 1  업데이트 함
+        // 리턴 값 : x
+
+        $this->db->query("
+            UPDATE 
+                member
+            SET
+                tot_record = tot_record + 1,
+                win_record = win_record + '".$result."'
+            WHERE
+                _id = '".$member_id."';
+        ");
+
+    }
+
 
     //착수가능 여부 확인 
     public function check_stone_overlap($x,$y, $board_id) {
@@ -86,11 +103,11 @@ class Game_model extends CI_Model {
         from
             GAME
         where
-            positionx = '".$x."'
-        AND
-            positiony = '".$y."'
-        AND 
-            waitboard_id = '".$board_id."'
+                positionx = '".$x."'
+            AND
+                positiony = '".$y."'
+            AND 
+                waitboard_id = '".$board_id."'
         ");
     }
 
