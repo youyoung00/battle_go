@@ -117,7 +117,7 @@
         </style>
     </head>
     <body>
-    <form method="post" action="game_list.php">
+    <form method="post" action="/index.php/game/game_list">
         <div id="waitpage">축하합니다! 
             <?php 
                 if($win_color == 0){

@@ -21,7 +21,33 @@ class Stone extends CI_Controller {
         // 돌 좌표, 방 id, 멤버 id, 돌 색깔
 
         $board_id = $this->input->get('board_id');
+
+        // 마지막 순서 돌이 10초전이라면 다음 순서 기권처리
+        $last_order = $this->Game_model->select_stone_domino($board_id);
+        $last_insert_time = $last_order->insert_time;
+        $current_time = time();
+
+        echo $last_insert_time;
+        echo current_time;
+
+        // 마지막 요청으로부터 10초가 지나면 게임 종료 처리
+        if ($current_time - $last_insert_time > 5) {
+            $last_insert_domino = $last_order->domino + 1;
+            $board_data = $this->Board_model->select_board($board_id);
+
+            $winner_id;
+            if ($last_insert_domino % 2 == $board_data->host_color) {
+                $winner_id = $board_data->guest_id;
+            } else {
+                $winner_id = $board_data->host_id;
+            }
+
+            header("Location: /index.php/game/record_result?board_id=".$board_id."&winner_id=".$winner_id); // Game->record_result 이동
+        }
+
+
         $stone_list = $this->Game_model->select_game_list($board_id);
+
 
         echo json_encode($stone_list);
     }
@@ -33,7 +59,7 @@ class Stone extends CI_Controller {
         $current_time = time();
 
         // 마지막 요청으로부터 3초가 지나
-        if ($last_insert_time != '' && $current_time - $last_insert_time < 3) {
+        if ($last_insert_time != '' && $current_time - $last_insert_time < 1) {
             return;
         }
 
@@ -50,13 +76,15 @@ class Stone extends CI_Controller {
 
         // 착수 권한이 있는지 체크
         $board_data = $this->Board_model->select_board($board_id);
-        if ($board_data->host_id != $member_id || $board_data->guest_id != $member_id) {
+        if ($board_data->host_id != $member_id && $board_data->guest_id != $member_id) {
+            echo '착수 권한 없음';
             return;
         }
 
         // 좌표에 돌이 이미 존재하는지 확인
         $check = $this->Game_model->check_stone_overlap($position_x, $position_y, $board_id);
         if ($check != '') {
+            echo '이미 돌 존재';
             return;
         }
 
@@ -76,6 +104,12 @@ class Stone extends CI_Controller {
             $stone_color = $board_data->host_color;
         } else {
             $stone_color = $board_data->guest_color;
+        }
+
+        // 자기 차례일때만 허용하기
+        if ($new_order % 2 != $stone_color) {
+            echo '내 차례 아님';
+            return;
         }
 
         // 새로운 돌 입력하기

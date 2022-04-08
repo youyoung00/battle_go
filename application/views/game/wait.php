@@ -89,7 +89,7 @@
     <form method="post" action="/index.php/game/play">
         <div id="waitpage">상대방 기다리는 중</div><br /><br /> 
         <div class="row col-15 mb-3 mt-3">
-            <input type="button" value="방폭파" onClick="location.href='이동할페이지'; class="btn btn-warning active" ><br /><br />
+            <input type="button" value="방폭파" onClick="location.href='/index.php/game/game_delete?board_id=<?php echo $board_id?>';" class="btn btn-warning active" ><br /><br />
             <input type="submit" value="게임화면 이동하기" class="btn btn-warning active">
         </div>
     </form>
@@ -119,9 +119,6 @@
             if(obj["status"] == 1){
                 $(location).attr("href", "/index.php/game/matching?board_id=<?php echo $board_id?>");
             } 
-
-            
-
             
                 
             }, // success 

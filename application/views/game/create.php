@@ -108,8 +108,8 @@
                 <div class="row form-floating mt-3">방이름 <input type="text" name="title" class="inputBox"><br /><br /></div>
                 <div class="row form-floating mb-3 mt-3">동색
                     <select name="color">
-                        <option value="0">백돌</option>
-                        <option value="1">흑돌</option>
+                        <option value="0">흑돌</option>
+                        <option value="1">백돌</option>
                     </select><br /><br />
                 </div>
                 <div> <input type="submit" value="방 만들기" class="w-btn-outline w-btn-yellow-outline"><br /><br /></div> 

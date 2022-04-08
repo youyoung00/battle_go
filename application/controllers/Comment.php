@@ -24,8 +24,7 @@ class Comment extends CI_Controller {
 
     // 댓글 추가하는 컨트롤러 메서드
     public function comment_insert() {
-        // $member_id = $this->session->userdata('_id');
-        $member_id = 10;
+        $member_id = $this->session->userdata('_id');
         $board_id = $this->input->post('board_id');
         $content = $this->input->post('content');
 

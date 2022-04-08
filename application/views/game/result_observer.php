@@ -116,7 +116,7 @@
         </style>
     </head>
     <body>
-    <form method="post" action="">
+    <form method="post" action="/index.php/game/game_list">
         <div id="waitpage">대국 결과 : 
             <?php 
                 if($win_color == 0){

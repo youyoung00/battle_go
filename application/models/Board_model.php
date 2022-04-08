@@ -25,7 +25,7 @@ class Board_model extends CI_Model {
             OR status = 1
             OR status = 2
         ORDER BY 
-            status ASC
+            created_at DESC
         ");
         return $data->result_array();
     }

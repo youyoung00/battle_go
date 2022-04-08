@@ -48,11 +48,21 @@ class Game_model extends CI_Model {
     public function select_stone_domino($board_id) {
         $data = $this->db->query("
         select 
-            MAX(domino) as domino
+            domino,
+            insert_time
         from 
             GAME
         where
-            waitboard_id = '".$board_id."'
+            waitboard_id = '".$board_id."' 
+            and
+            domino = (
+                select
+                    MAX(domino)
+                from
+                    GAME
+                where
+                    waitboard_id = '".$board_id."'
+            )
         ");
         return $data->row();
 

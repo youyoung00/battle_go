@@ -16,7 +16,7 @@
                         display: flex;
                         flex-direction:column;
                         /* overflow: hidden; */
-                        border-radius: 5rem;
+                        border-radius: 2rem;
                         box-shadow: 0px 1rem 1.5rem rgba(0,0,0,0.5);
                         /* margin: 0 auto; */
                         
@@ -69,6 +69,7 @@
             
             <h1>대기실</h1>  <br /><br />
             <h2><?php echo $profile['nick'].'님'.' '.$profile['win'].'승 '.$profile['lose']?>패</h2>
+            <a href="/index.php/game/create">방만들기</a>
             
             
   
@@ -114,7 +115,7 @@ foreach($board_list as $row)
                 </tbody>
 
               </table>
-           <a href="/index.php/game/create">방만들기</a>
+           <!-- 요기 -->
            
             </form>
           </table>

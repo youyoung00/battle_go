@@ -240,7 +240,7 @@
             position: absolute;
             display: inline-block;
             right: 400px;
-            top: 30px;
+            top: 80px;
         }
     </style>
 
@@ -259,7 +259,7 @@
 
             <div class="buttons">
                 <input type="button" id="reload" value="한 판 더 !" class="btn btn-warning" onclick="">
-                <input type="button" value="기권" class="btn btn-warning" onClick="location.href='result_lose.php'">
+                <input type="button" value="기권" class="btn btn-warning" onclick="game_throw();">
                 <!-- <input type="button" value="기권" class="btn btn-warning" onClick="location.href='index.php/game/result_lose.php'"> -->
             </div>
 
@@ -302,8 +302,14 @@
         /><br /> <button type="button" onclick="myFunction()">SEND</button> -->
 
     </body>
+        
+
+    
 
     <script>
+
+    
+        
     function test1(){
         var formData = $("#chat-form").serialize();
 
@@ -326,7 +332,32 @@
     }
 
 
-    function getList(){
+    
+
+    
+    </script>
+
+    <script>
+
+    function game_throw(){
+        $.ajax({
+            cache : false,
+            url : "/index.php/game/game_throw?board_id=<?php echo $board_data->_id?>", // 요기에
+            type : 'GET', 
+            // data : formData, 
+            // settimeout : 500,
+            success : function(data) {
+                console.log(data);
+            }, // success 
+    
+            error : function(xhr, status) {
+                console.log(xhr + " : " + status);
+            }
+
+        });
+        
+    }
+        function getList(){
         var number = 0;
         console.log('list'+number);
         number++;
@@ -359,11 +390,7 @@
             }
         }); // $.ajax */
     }
-
-    
-    </script>
-
-    <script>
+        const colorData = {0: '흑', 1: '백'};
         window.onload = function () {
 
             // 2초 간격으로 메시지를 보여줌
@@ -477,24 +504,24 @@ function set_board()
             if("<?php echo $member_id?>" == host_id){
                 // 호스트일 때
                 if(host_color == order % 2) {
-                    // 내 턴
-                    document.getElementById('turn').innerHTML="<?php echo $profile->nick?> 님 (흑) 턴입니다.";
+                    // 내 턴4
+                    document.getElementById('turn').innerHTML=`<?php echo $profile->nick?> 님 (${colorData[host_color]}) 턴입니다.`;
                     
                     
                 } else {
                     // 상대 턴
-                    document.getElementById('turn').innerHTML="<?php echo $profile->nick?> 님 (흑) 턴이 아닙니다.000";
+                    document.getElementById('turn').innerHTML=`<?php echo $profile->nick?> 님 (${colorData[host_color]}) 턴이 아닙니다.`;
                 }
                 
             } else {
                 // 게스트일 때
                 if(guest_color == order % 2) {
                     //내턴ㅁ
-                    document.getElementById('turn').innerHTML="<?php echo $profile->nick?> 님 (흑) 턴입니다.";
+                    document.getElementById('turn').innerHTML=`<?php echo $profile->nick?> 님 (${colorData[guest_color]}) 턴입니다.`;
                 }
                 else {
                     // 상대턴
-                    document.getElementById('turn').innerHTML="<?php echo $profile->nick?> 님 (흑) 턴이 아닙니다.2";
+                    document.getElementById('turn').innerHTML=`<?php echo $profile->nick?> 님 (${colorData[guest_color]}) 턴이 아닙니다.`;
                 }
             }
 
@@ -506,9 +533,9 @@ function set_board()
             
 
             if(winner_id){
-                // location.href="result?board_id='<?php echo $board_data->_id?>'"; 
+                location.href="result?board_id='<?php echo $board_data->_id?>'"; 
                 // alert('승부결정남');
-                // console.log('승부결정남');
+                console.log('승부결정남');
             }
     
             for (let index = 0; index < stone_list.length; index++) { 

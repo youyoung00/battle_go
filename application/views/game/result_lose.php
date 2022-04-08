@@ -94,7 +94,7 @@
         </style>
     </head>
     <body>
-    <form method="post" action="">
+    <form method="post" action="/index.php/game/game_list">
         <div id="waitpage">왜 그랬어요.. 
             <?php 
                 

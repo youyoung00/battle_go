@@ -27,6 +27,13 @@ class Game extends CI_Controller {
         echo '초기화면입니다';
     }
 
+    //방 폭파 메서드
+    public function game_delete() {
+        $board_id = $this->input->get('board_id');
+        $this->Board_model->delete_board($board_id);
+        header("Location: /index.php/game/game_list");
+    }
+
     //게임 대기실 리스트를 불러오는 메서드
     public function game_list() {
         $_id = $this->session->userdata('_id');
@@ -67,10 +74,17 @@ class Game extends CI_Controller {
     public function enter() {
         $board_id = $this->input->get('board_id'); // get 방식으로 방 _id 값을 받아
         $member_id = $this->session->userdata('_id'); // 세션에서 member_id 값을 받아
+
         
         $result = $this->Board_model->enter_board($member_id, $board_id);
         
-        $this->wait($board_id);
+        // 관전자일 경우는 바로 관전자 화면으로
+        $board_data = $this->Board_model->select_board($board_id);
+        if ($member_id != $board_data->host_id && $member_id != $board_data->guest_id) {
+            header("Location: /index.php/game/play_observer?board_id=".$board_id);
+        } else {
+            $this->wait($board_id);
+        }
     }
 
     // 방생성후 대기화면을 보여주는 메서드
@@ -98,28 +112,42 @@ class Game extends CI_Controller {
 
     public function match_check() {
         $board_id = $this->input->get('board_id');
-        $result = $this->Board_model->select_board($board_id);
+        $result = $this->Board_model->check_board_status($board_id);
 
-        $data['board_data'] = $result;
+        $data['status'] = $result->status;
         echo json_encode($data);
     }
 
     // 게임시작후 진행화면을 보여주는 메서드
     public function play() {
-        // $member_id = $this->session->userdata['_id'];
-        $member_id = 10; // 테스트용 멤버 아이디(관전자)
-        // $board_id = $this->input->get('board_id'); // get방식으로 board_id 가져오기
+        $member_id = $this->session->userdata['_id'];
+        // $member_id = 10; // 테스트용 멤버 아이디(관전자)
+        $board_id = $this->input->get('board_id'); // get방식으로 board_id 가져오기
         $profile = $this->Member_model->member_profile($member_id);
-        $board_id = 1; // 테스트용 보드 아이디
+        // $board_id = 1; // 테스트용 보드 아이디
         $board_data = $this->Board_model->select_board($board_id);
-        // $comment_list = $this->Comment_model->select_comment_list($board_id);
 
         $data['profile'] = $profile;
         $data['member_id'] = $member_id;
         $data['board_data'] = $board_data;
-        // $data['comment_list'] = $comment_list;
         
         $this->load->view('game/play', $data);
+    }
+
+    // 게임시작후 진행화면을 보여주는 메서드 (관전자)
+    public function play_observer() {
+        $member_id = $this->session->userdata['_id'];
+        // $member_id = 10; // 테스트용 멤버 아이디(관전자)
+        $board_id = $this->input->get('board_id'); // get방식으로 board_id 가져오기
+        $profile = $this->Member_model->member_profile($member_id);
+        // $board_id = 1; // 테스트용 보드 아이디
+        $board_data = $this->Board_model->select_board($board_id);
+
+        $data['profile'] = $profile;
+        $data['member_id'] = $member_id;
+        $data['board_data'] = $board_data;
+        
+        $this->load->view('game/play_observer', $data);
     }
 
     // 기권할 경우 수행할 컨트롤러 메서드
@@ -228,6 +256,23 @@ class Game extends CI_Controller {
         } else {
             $new_order = 0;
         }
+        // $last_insert_time = $last_order->insert_time;
+        // $current_time = time();
+
+        // echo $last_insert_time;
+        // echo $current_time;
+
+        // // 마지막 요청으로부터 10초가 지나면 게임 종료 처리
+        // if ($current_time - $last_insert_time > 5) {
+        //     $winner_id;
+        //     if ($new_order % 2 == $board_data->host_color) {
+        //         $winner_id = $board_data->guest_id;
+        //     } else {
+        //         $winner_id = $board_data->host_id;
+        //     }
+
+        //     header("Location: /index.php/game/record_result?board_id=".$board_id."&winner_id=".$winner_id); // Game->record_result 이동
+        // }
 
         // 바둑돌 리스트 가져오기
         $stone_list = $this->Game_model->select_game_list($board_id);
@@ -244,7 +289,7 @@ class Game extends CI_Controller {
     }
 
     public function test() {
-        $result = $this->Board_model->insert_board('test', 3, 0, 1);
+        $result = $this->Game_model->select_stone_domino(198);
         var_dump($result);
     }
 }
